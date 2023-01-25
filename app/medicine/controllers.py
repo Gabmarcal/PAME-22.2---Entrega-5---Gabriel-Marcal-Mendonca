@@ -1,79 +1,79 @@
 from flask import request
 from flask.views import MethodView
 
-from .models import Users
-from .schemas import UserSchema
+from .models import Medicine
+from .schemas import MedicineSchema
 
-class UserController(MethodView):
+class MedicineController(MethodView):
     
     def post(self):
-        schema = UserSchema()
+        schema = MedicineSchema()
         data = request.json
 
         try:
-            user = schema.load(data)
+            medicine = schema.load(data)
         except:
             return{}, 400
         
-        user.save()
+        medicine.save()
 
-        return schema.dump(user), 201
+        return schema.dump(medicine), 201
     
     def get(self):
-        schema=UserSchema()
-        users = Users.query.all()
-        return schema.dump(users,many=True), 200
+        schema=MedicineSchema()
+        medicine = Medicine.query.all()
+        return schema.dump(medicine,many=True), 200
 
-class UserDetails(MethodView):
+class MedicineDetails(MethodView):
 
     def get(self,id):
-        schema = UserSchema()
+        schema = MedicineSchema()
 
-        user = Users.query.get(id)
+        medicine = Medicine.query.get(id)
 
-        if not user: return{}, 404
+        if not medicine: return{}, 404
 
-        return schema.dump(user), 200
+        return schema.dump(medicine), 200
 
     
     def put(self,id):
-        schema = UserSchema()
+        schema = MedicineSchema()
 
-        user = Users.query.get(id)
+        medicine = Medicine.query.get(id)
 
-        if not user: return{}, 404
+        if not medicine: return{}, 404
 
         data = request.json
         try:
-            user = schema.load(data, instance = user)
+            medicine = schema.load(data, instance = medicine)
         except:
             return{}, 400
         
-        user.save()
+        medicine.save()
 
-        return schema.dump(user), 201
+        return schema.dump(medicine), 201
     
     def patch(self,id):
-        schema = UserSchema()
+        schema = MedicineSchema()
 
-        user = Users.query.get(id)
+        medicine = Medicine.query.get(id)
 
-        if not user: return{}, 404
+        if not medicine: return{}, 404
 
         data = request.json
         try:
-            user = schema.load(data, instance = user, partial=True)
+            medicine = schema.load(data, instance = medicine, partial=True)
         except:
             return{}, 400
         
-        user.save()
+        medicine.save()
 
-        return schema.dump(user), 201
+        return schema.dump(medicine), 201
     
     def delete(self,id):
-        user = Users.query.get(id)
+        medicine = Medicine.query.get(id)
 
-        if not user: return{}, 404
+        if not medicine: return{}, 404
 
-        user.delete(user)
+        medicine.delete(medicine)
         return{}, 204
